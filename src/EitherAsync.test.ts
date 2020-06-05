@@ -62,6 +62,18 @@ describe('EitherAsync', () => {
     expect(await newEitherAsync2.run()).toEqual(Right('val'))
   })
 
+  test('map async', async () => {
+    const newEitherAsync = EitherAsync(() => Promise.resolve(5)).map(
+      async (_) => 'val'
+    )
+    const newEitherAsync2 = EitherAsync(() => Promise.resolve(5))[
+      'fantasy-land/map'
+    ](async (_) => 'val')
+
+    expect(await newEitherAsync.run()).toEqual(Right('val'))
+    expect(await newEitherAsync2.run()).toEqual(Right('val'))
+  });
+
   test('mapLeft', async () => {
     const newEitherAsync = EitherAsync<number, never>(() =>
       Promise.reject(0)
