@@ -30,7 +30,7 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
    */
   run(): Promise<Either<L, R>>
   /** Transforms the `Right` value of `this` with a given function. If the EitherAsync that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map */
-  map<R2>(f: (value: R) => R2): EitherAsync<L, R2>
+  map<R2>(f: (value: R) => R2 | PromiseLike<R2>): EitherAsync<L, R2>
   /** Maps the `Left` value of `this`, acts like an identity if `this` is `Right` */
   mapLeft<L2>(f: (value: L) => L2): EitherAsync<L2, R>
   /** Transforms `this` with a function that returns a `EitherAsync`. Behaviour is the same as the regular Either#chain */
@@ -93,8 +93,8 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     }
   }
 
-  map<R2>(f: (value: R) => R2): EitherAsync<L, R2> {
-    return EitherAsync((helpers) => this.runPromise(helpers).then(f))
+  map<R2>(f: (value: R) => R2 | PromiseLike<R2>): EitherAsync<L, R2> {
+    return EitherAsync((helpers) => this.runPromise(helpers).then(f));
   }
 
   mapLeft<L2>(f: (value: L) => L2): EitherAsync<L2, R> {
