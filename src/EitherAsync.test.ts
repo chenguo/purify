@@ -87,6 +87,19 @@ describe('EitherAsync', () => {
     expect(await newEitherAsync2.run()).toEqual(Right(0))
   })
 
+  test('mapLeft async', async () => {
+    const newEitherAsync = EitherAsync<number, never>(() =>
+      Promise.reject(0)
+    ).mapLeft(async (x) => x + 1)
+
+    const newEitherAsync2 = EitherAsync<never, number>(() =>
+      Promise.resolve(0)
+    ).mapLeft(async (x) => x + 1)
+
+    expect(await newEitherAsync).toEqual(Left(1))
+    expect(await newEitherAsync2).toEqual(Right(0))
+  })
+
   test('chain', async () => {
     const newEitherAsync = EitherAsync(() => Promise.resolve(5)).chain((_) =>
       EitherAsync(() => Promise.resolve('val'))
