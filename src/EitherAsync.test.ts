@@ -62,13 +62,13 @@ describe('EitherAsync', () => {
     expect(await newEitherAsync2.run()).toEqual(Right('val'))
   })
 
-  test('map async', async () => {
+  test('map (with PromiseLike)', async () => {
     const newEitherAsync = EitherAsync(() => Promise.resolve(5)).map(
-      async (_) => 'val'
+      (_) => Promise.resolve('val')
     )
     const newEitherAsync2 = EitherAsync(() => Promise.resolve(5))[
       'fantasy-land/map'
-    ](async (_) => 'val')
+    ]((_) => Promise.resolve('val'))
 
     expect(await newEitherAsync.run()).toEqual(Right('val'))
     expect(await newEitherAsync2.run()).toEqual(Right('val'))
@@ -87,14 +87,14 @@ describe('EitherAsync', () => {
     expect(await newEitherAsync2.run()).toEqual(Right(0))
   })
 
-  test('mapLeft async', async () => {
+  test('mapLeft (with PromiseLike)', async () => {
     const newEitherAsync = EitherAsync<number, never>(() =>
       Promise.reject(0)
-    ).mapLeft(async (x) => x + 1)
+    ).mapLeft((x) => Promise.resolve(x + 1))
 
     const newEitherAsync2 = EitherAsync<never, number>(() =>
       Promise.resolve(0)
-    ).mapLeft(async (x) => x + 1)
+    ).mapLeft((x) => Promise.resolve(x + 1))
 
     expect(await newEitherAsync).toEqual(Left(1))
     expect(await newEitherAsync2).toEqual(Right(0))
