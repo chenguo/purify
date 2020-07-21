@@ -46,9 +46,6 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   'fantasy-land/chain'<R2>(
     f: (value: R) => PromiseLike<Either<L, R2>>
   ): EitherAsync<L, R2>
-
-  /** WARNING: This is implemented only for Promise compatibility. Please use `chain` instead. */
-  then: any
 }
 
 export interface EitherAsyncValue<R> extends PromiseLike<R> {}
